@@ -28,7 +28,7 @@ const App = () => {
                 </div>
                 <div className="functions">
                     <button>clear</button>
-                    <button>r</button>
+                    <button>borrar</button>
                 </div>
             </div>
             <div className="column-right">
