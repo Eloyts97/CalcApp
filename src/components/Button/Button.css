@@ -1,3 +1,7 @@
 .button-long-text {
     font-size: 12px;
 }
+
+.number button:last-child {
+    width: 100%;
+}
