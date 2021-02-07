@@ -1,4 +1,6 @@
+/* eslint no-eval: 0 */
 import React, { useState } from 'react'
+import words from 'lodash.words'
 import Functions from './components/Functions'
 import Numbers from './components/Numbers'
 import MathOperations from './components/MathOperations'
@@ -15,24 +17,43 @@ const App = () => {
     // Array destructuring
     const [stack, setStack] = useState("")
 
+    const items = words(stack, /[^+^*^-^/]+/g)
+
+    const value = items.length > 0 ? items[items.length - 1] : "0"
+
     return (<main className="react-calculator">
         <h2>Calc App</h2>
         <div className="d-flex">
             <div className="column-left">
-                <Result value={stack}/>
+                <Result value={value}/>
                 <Numbers onClickNumber={number => {
                     console.log("Click en number: ", number)
-                    setStack(stack + number)
+                    setStack(`${stack}${number}`)
                 }} />
                 <Functions
-                    onContentClear={clear => console.log("Content Clear", clear)}
-                    onDelete={() => console.log("onDelete")}
+                    onContentClear={clear => {
+                        console.log("Content Clear", clear)
+                        setStack("")
+                    }}
+                    onDelete={() => {
+                        if (stack.length > 0) {
+                            const newStack = stack.substring(0, stack.length - 1)
+                            setStack(newStack)
+                            console.log("onDelete")
+                        }
+                    }}
                 />
             </div>
             <div className="column-right">
                 <MathOperations 
-                    onClickOperation={operation => console.log("Operación: ", operation)}
-                    onClickEqual={equal => console.log("Equal: ", equal)} 
+                    onClickOperation={operation => {
+                        console.log("Operación: ", operation)
+                        setStack(`${stack}${operation}`)
+                    }}
+                    onClickEqual={equal => {
+                        console.log("Equal: ", equal)
+                        setStack(eval(stack).toString())
+                    }} 
                 />
             </div>
         </div>
